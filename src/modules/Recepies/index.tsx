@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -9,90 +9,45 @@ import {
   View,
 } from 'react-native';
 import Logo from '../../assets/logo.png';
+import {makeServer} from '../../server';
 import MasterClassBanner from './components/MasterClassBanner';
 import RecepieCard from './components/RecepieCard';
 
-const DATA = [
-  {
-    id: 1,
-    category_id: 1,
-    title: 'The Limit is The Sky',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/JwOEa4hmYk/stories/vf.JPEG',
-  },
-  {
-    id: 2,
-    category_id: 2,
-    title: 'Avocado Cream',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/JwOEa4hmYk/stories/vf.JPEG',
-  },
-  {
-    id: 3,
-    category_id: 2,
-    title: 'Sandwich',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/JwOEa4hmYk/stories/vf.JPEG',
-  },
-  {
-    id: 4,
-    category_id: 2,
-    title: '',
-    img_url:
-      'https://d2bn8tb344j6vy.cloudfront.net/JwOEa4hmYk/stories/q2b.JPEG',
-  },
-  {
-    id: 5,
-    category_id: 1,
-    title: 'Panificando',
-    img_url:
-      'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
-  },
-  {
-    id: 6,
-    category_id: 3,
-    title: '',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-  },
-  {
-    id: 7,
-    category_id: 1,
-    title: 'Panificando',
-    img_url:
-      'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
-  },
-  {
-    id: 8,
-    category_id: 3,
-    title: '',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-  },
-  {
-    id: 9,
-    category_id: 1,
-    title: 'Panificando',
-    img_url:
-      'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
-  },
-  {
-    id: 10,
-    category_id: 3,
-    title: '',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-  },
-  {
-    id: 11,
-    category_id: 3,
-    title: '',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-  },
-];
+if (process.env.NODE_ENV === 'development') {
+  if ((window as any).server) {
+    (window as any).server.shutdown();
+  }
+  (window as any).server = makeServer();
+}
 
 const Recepies = () => {
+  const [recepies, setRecepies] = useState();
+  const [serverError, setServerError] = useState();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        let res = await fetch('/api/recepies');
+        let data = await res.json();
+        console.log(data);
+        data.error ? setServerError(data.error) : setRecepies(data.recepies);
+      } catch (error) {
+        setServerError(error.message);
+      }
+    };
+
+    console.log(recepies);
+
+    fetchUsers();
+  }, [recepies]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
       <MasterClassBanner imageUri="https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg" />
       <FlatList
-        data={DATA}
+        data={recepies}
         renderItem={({item}) => (
           <RecepieCard img_url={item.img_url} title={item.title} />
         )}
@@ -102,7 +57,7 @@ const Recepies = () => {
         ListHeaderComponent={<Text style={styles.text}>Creation for you</Text>}
         ListFooterComponent={
           <View>
-            <Text style={styles.text}>No more results</Text>
+            <Text style={styles.text}>no more results</Text>
           </View>
         }
       />
