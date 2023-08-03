@@ -1,9 +1,12 @@
 import React from 'react';
 import {
+  Dimensions,
   FlatList,
   Image,
+  ImageBackground,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
   Text,
   View,
 } from 'react-native';
@@ -49,74 +52,82 @@ const DATA = [
     img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
   },
   {
-    id: 3,
-    category_id: 2,
-    title: 'Desayuno',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/4BHK6UC1U1/stories/8l.JPEG',
+    id: 7,
+    category_id: 1,
+    title: 'Panificando',
+    img_url:
+      'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
   },
   {
-    id: 6,
+    id: 8,
     category_id: 3,
     title: '',
     img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
   },
   {
-    id: 3,
-    category_id: 2,
-    title: 'Desayuno',
-    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/4BHK6UC1U1/stories/8l.JPEG',
+    id: 9,
+    category_id: 1,
+    title: 'Panificando',
+    img_url:
+      'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
+  },
+  {
+    id: 10,
+    category_id: 3,
+    title: '',
+    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
+  },
+  {
+    id: 11,
+    category_id: 3,
+    title: '',
+    img_url: 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
   },
 ];
 
 const Item = ({title, img_url}) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        marginHorizontal: 8,
-        paddingHorizontal: 8,
-        borderWidth: 1,
-        borderColor: 'red',
-      }}>
-      <Image
-        style={{width: '100%', height: 162, borderRadius: 5}}
-        source={{uri: img_url}}
-      />
-      <Text>{title}</Text>
+    <View style={styles.listContainer}>
+      <Image style={styles.imageCard} source={{uri: img_url}} />
+      <Text style={{fontWeight: 'bold', color: 'black', marginTop: 12}}>
+        {title}
+      </Text>
     </View>
   );
 };
 
 const Recepies = () => {
   return (
-    <SafeAreaView>
-      <Image
-        style={{width: '100%', height: 100}}
-        resizeMode={'center'}
-        source={Logo}
-      />
+    <SafeAreaView style={styles.container}>
+      <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
-      <Image
+      <ImageBackground
         source={{
           uri: 'https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg',
         }}
-        style={{
-          width: '100%',
-          height: 120,
-          borderRadius: 5,
-          marginBottom: 32,
-          marginHorizontal: 16,
-          borderWidth: 1,
-          borderColor: 'red',
-        }}
-      />
-      <Text style={{margin: 16}}>Creation for you</Text>
+        style={styles.masterClassImage}
+        imageStyle={{borderRadius: 6}}>
+        <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 12}}>
+          NEW
+        </Text>
+        <Text style={{color: '#fff', fontSize: 24}}>
+          Fish preparation like {'\n'}a star chef
+        </Text>
+        <Text style={{color: '#fff', fontSize: 12}}>With Rolf Fliegauf</Text>
+      </ImageBackground>
       <FlatList
         data={DATA}
         renderItem={({item}) => (
           <Item img_url={item.img_url} title={item.title} />
         )}
         numColumns={2}
+        columnWrapperStyle={{justifyContent: 'space-between'}}
+        keyExtractor={item => item.id.toString()}
+        ListHeaderComponent={
+          <Text style={{fontWeight: 'bold', color: 'black', margin: 10}}>
+            Creation for you
+          </Text>
+        }
         ListFooterComponent={
           <View>
             <Text>No more results</Text>
@@ -128,3 +139,40 @@ const Recepies = () => {
 };
 
 export default Recepies;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F7F9FD',
+  },
+  logo: {width: '100%', height: 100},
+
+  listContainer: {
+    width: Dimensions.get('window').width / 2 - 20,
+    backgroundColor: 'white',
+    margin: 10,
+    borderRadius: 20,
+  },
+  imageCard: {width: '100%', height: 162, borderRadius: 5},
+  imageContainer: {
+    margin: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  image: {width: '100%', height: undefined, aspectRatio: 1},
+  masterClassImage: {
+    width: Dimensions.get('window').width - 20,
+    height: 170,
+    marginHorizontal: 20,
+    marginBottom: 32,
+    padding: 20,
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignSelf: 'center',
+  },
+  nameText: {
+    color: 'black',
+    fontWeight: 'bold',
+    marginLeft: 15,
+  },
+});
