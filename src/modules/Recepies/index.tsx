@@ -3,14 +3,14 @@ import {
   Dimensions,
   FlatList,
   Image,
-  ImageBackground,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
 import Logo from '../../assets/logo.png';
+import MasterClassBanner from './components/MasterClassBanner';
+import RecepieCard from './components/RecepieCard';
 
 const DATA = [
   {
@@ -85,52 +85,24 @@ const DATA = [
   },
 ];
 
-const Item = ({title, img_url}) => {
-  return (
-    <View style={styles.listContainer}>
-      <Image style={styles.imageCard} source={{uri: img_url}} />
-      <Text style={{fontWeight: 'bold', color: 'black', marginTop: 12}}>
-        {title}
-      </Text>
-    </View>
-  );
-};
-
 const Recepies = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
-      <ImageBackground
-        source={{
-          uri: 'https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg',
-        }}
-        style={styles.masterClassImage}
-        imageStyle={{borderRadius: 6}}>
-        <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 12}}>
-          NEW
-        </Text>
-        <Text style={{color: '#fff', fontSize: 24}}>
-          Fish preparation like {'\n'}a star chef
-        </Text>
-        <Text style={{color: '#fff', fontSize: 12}}>With Rolf Fliegauf</Text>
-      </ImageBackground>
+      <MasterClassBanner imageUri="https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg" />
       <FlatList
         data={DATA}
         renderItem={({item}) => (
-          <Item img_url={item.img_url} title={item.title} />
+          <RecepieCard img_url={item.img_url} title={item.title} />
         )}
         numColumns={2}
         columnWrapperStyle={{justifyContent: 'space-between'}}
         keyExtractor={item => item.id.toString()}
-        ListHeaderComponent={
-          <Text style={{fontWeight: 'bold', color: 'black', margin: 10}}>
-            Creation for you
-          </Text>
-        }
+        ListHeaderComponent={<Text style={styles.text}>Creation for you</Text>}
         ListFooterComponent={
           <View>
-            <Text>No more results</Text>
+            <Text style={styles.text}>No more results</Text>
           </View>
         }
       />
@@ -160,19 +132,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   image: {width: '100%', height: undefined, aspectRatio: 1},
-  masterClassImage: {
-    width: Dimensions.get('window').width - 20,
-    height: 170,
-    marginHorizontal: 20,
-    marginBottom: 32,
-    padding: 20,
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    alignSelf: 'center',
-  },
+
   nameText: {
     color: 'black',
     fontWeight: 'bold',
     marginLeft: 15,
   },
+  text: {fontWeight: 'bold', color: 'black', marginTop: 12},
 });
