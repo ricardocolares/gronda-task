@@ -9,10 +9,20 @@
  */
 
 import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Recepies from './modules/Recepies';
 
+const {Navigator, Screen} = createNativeStackNavigator();
+
 const App = () => {
-  return <Recepies />;
+  return (
+    <NavigationContainer>
+      <Navigator>
+        <Screen name="Recepies" component={Recepies} />
+      </Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default App;

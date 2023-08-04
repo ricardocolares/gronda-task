@@ -20,9 +20,19 @@ if (process.env.NODE_ENV === 'development') {
   (window as any).server = makeServer();
 }
 
+type RecepiesProps = {
+  id: number;
+  category_id?: number;
+  title: string;
+  img_url: string;
+};
+
+const ERROR_MESSAGE =
+  'Sorry, we are having some internal issues. But dont worrie, our team is working to quickly fix it. Try again latter';
+
 const Recepies = () => {
-  const [recepies, setRecepies] = useState();
-  const [serverError, setServerError] = useState();
+  const [recepies, setRecepies] = useState<RecepiesProps[]>();
+  const [serverError, setServerError] = useState<string>();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -31,8 +41,8 @@ const Recepies = () => {
         let data = await res.json();
         console.log(data);
         data.error ? setServerError(data.error) : setRecepies(data.recepies);
-      } catch (error) {
-        setServerError(error.message);
+      } catch {
+        setServerError(ERROR_MESSAGE);
       }
     };
 
@@ -46,21 +56,31 @@ const Recepies = () => {
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
       <MasterClassBanner imageUri="https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg" />
-      <FlatList
-        data={recepies}
-        renderItem={({item}) => (
-          <RecepieCard img_url={item.img_url} title={item.title} />
-        )}
-        numColumns={2}
-        columnWrapperStyle={{justifyContent: 'space-between'}}
-        keyExtractor={item => item.id.toString()}
-        ListHeaderComponent={<Text style={styles.text}>Creation for you</Text>}
-        ListFooterComponent={
-          <View>
-            <Text style={styles.text}>no more results</Text>
-          </View>
-        }
-      />
+      {serverError ? (
+        <Text testID="server-error">{serverError}</Text>
+      ) : !recepies ? (
+        <Text>Loading...</Text>
+      ) : recepies.length === 0 ? (
+        <Text testID="no-users">No recepies!</Text>
+      ) : (
+        <FlatList
+          data={recepies}
+          renderItem={({item}) => (
+            <RecepieCard img_url={item.img_url} title={item.title} />
+          )}
+          numColumns={2}
+          columnWrapperStyle={{justifyContent: 'space-between'}}
+          keyExtractor={item => item.id.toString()}
+          ListHeaderComponent={
+            <Text style={styles.text}>Creation for you</Text>
+          }
+          ListFooterComponent={
+            <View>
+              <Text style={styles.text}>no more results</Text>
+            </View>
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
