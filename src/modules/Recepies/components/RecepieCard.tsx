@@ -1,17 +1,27 @@
 import React from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
 type CardProps = {
   title: string;
   img_url: string;
+  navigation: () => void;
 };
 
-export default function RecepieCard({img_url, title}: CardProps) {
+export default function RecepieCard({img_url, title, navigation}: CardProps) {
   return (
-    <View style={styles.listContainer}>
-      <Image style={styles.imageCard} source={{uri: img_url}} />
-      <Text style={styles.text}>{title}</Text>
-    </View>
+    <TouchableWithoutFeedback onPress={navigation}>
+      <View style={styles.listContainer}>
+        <Image style={styles.imageCard} source={{uri: img_url}} />
+        <Text style={styles.text}>{title}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

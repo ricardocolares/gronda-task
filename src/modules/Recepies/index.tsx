@@ -20,26 +20,26 @@ if (process.env.NODE_ENV === 'development') {
   (window as any).server = makeServer();
 }
 
-type RecepiesProps = {
+type RecepieProps = {
   id: number;
   category_id?: number;
   title: string;
   img_url: string;
+  views: number;
 };
 
 const ERROR_MESSAGE =
   'Sorry, we are having some internal issues. But dont worrie, our team is working to quickly fix it. Try again latter';
 
-const Recepies = () => {
-  const [recepies, setRecepies] = useState<RecepiesProps[]>();
+const Recepies: React.FC = ({navigation}) => {
+  const [recepies, setRecepies] = useState<RecepieProps[]>();
   const [serverError, setServerError] = useState<string>();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        let res = await fetch('/api/recepies');
-        let data = await res.json();
-        console.log(data);
+        const res = await fetch('/api/recepies');
+        const data = await res.json();
         data.error ? setServerError(data.error) : setRecepies(data.recepies);
       } catch {
         setServerError(ERROR_MESSAGE);
@@ -66,7 +66,11 @@ const Recepies = () => {
         <FlatList
           data={recepies}
           renderItem={({item}) => (
-            <RecepieCard img_url={item.img_url} title={item.title} />
+            <RecepieCard
+              img_url={item.img_url}
+              title={item.title}
+              navigation={() => navigation.navigate('Details')}
+            />
           )}
           numColumns={2}
           columnWrapperStyle={{justifyContent: 'space-between'}}

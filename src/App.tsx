@@ -12,6 +12,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Recepies from './modules/Recepies';
+import RecepieDetails from './modules/Recepies/Screens/RecepieDetails';
 
 const {Navigator, Screen} = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ const App = () => {
     <NavigationContainer>
       <Navigator>
         <Screen name="Recepies" component={Recepies} />
+        <Screen name="Details" component={RecepieDetails} />
       </Navigator>
     </NavigationContainer>
   );
