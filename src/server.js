@@ -5,9 +5,9 @@ export function makeServer({environment = 'development'} = {}) {
     environment,
 
     routes() {
-      this.get('/api/recepies', () => {
+      this.get('/api/recipies', () => {
         return {
-          recepies: [
+          recipies: [
             {
               id: 1,
               category_id: 1,

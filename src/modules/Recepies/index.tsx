@@ -11,7 +11,7 @@ import {
 import Logo from '../../assets/logo.png';
 import {makeServer} from '../../server';
 import MasterClassBanner from './components/MasterClassBanner';
-import RecepieCard from './components/RecepieCard';
+import RecipeCard from './components/RecepieCard';
 
 if (process.env.NODE_ENV === 'development') {
   if ((window as any).server) {
@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
   (window as any).server = makeServer();
 }
 
-type RecepieProps = {
+type RecipieProps = {
   id: number;
   category_id?: number;
   title: string;
@@ -31,65 +31,84 @@ type RecepieProps = {
 const ERROR_MESSAGE =
   'Sorry, we are having some internal issues. But dont worrie, our team is working to quickly fix it. Try again latter';
 
-const Recepies: React.FC = ({navigation}) => {
-  const [recepies, setRecepies] = useState<RecepieProps[]>();
+const Recipies: React.FC = ({navigation}) => {
+  const [recipies, setRecipies] = useState<RecipieProps[]>();
   const [serverError, setServerError] = useState<string>();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('/api/recepies');
+        const res = await fetch('/api/recipies');
         const data = await res.json();
-        data.error ? setServerError(data.error) : setRecepies(data.recepies);
+        const formatedRecipies = data.recipies.map((recipie: RecipieProps) => ({
+          ...recipie,
+          views: 0,
+        }));
+        data.error ? setServerError(data.error) : setRecipies(formatedRecipies);
       } catch {
         setServerError(ERROR_MESSAGE);
       }
     };
 
-    console.log(recepies);
-
     fetchUsers();
-  }, [recepies]);
+  }, [recipies]);
+
+  const renderHeader = () => {
+    return (
+      <View>
+        <MasterClassBanner imageUri="https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg" />
+        <Text style={styles.text}>Creation for you</Text>
+      </View>
+    );
+  };
+
+  const renderFooter = () => {
+    return (
+      <View>
+        <Text style={styles.text}>No more results</Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
-      <MasterClassBanner imageUri="https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg" />
       {serverError ? (
         <Text testID="server-error">{serverError}</Text>
-      ) : !recepies ? (
+      ) : !recipies ? (
         <Text>Loading...</Text>
-      ) : recepies.length === 0 ? (
-        <Text testID="no-users">No recepies!</Text>
+      ) : recipies.length === 0 ? (
+        <Text testID="no-users">No recipies!</Text>
       ) : (
         <FlatList
-          data={recepies}
+          data={recipies}
           renderItem={({item}) => (
-            <RecepieCard
+            <RecipeCard
               img_url={item.img_url}
               title={item.title}
-              navigation={() => navigation.navigate('Details')}
+              navigation={() =>
+                navigation.navigate('Details', {
+                  id: item.id,
+                  count: item.views,
+                  item,
+                })
+              }
             />
           )}
           numColumns={2}
           columnWrapperStyle={{justifyContent: 'space-between'}}
           keyExtractor={item => item.id.toString()}
-          ListHeaderComponent={
-            <Text style={styles.text}>Creation for you</Text>
-          }
-          ListFooterComponent={
-            <View>
-              <Text style={styles.text}>no more results</Text>
-            </View>
-          }
+          ListHeaderComponent={renderHeader}
+          ListFooterComponent={renderFooter}
+          onEndReachedThreshold={0.2}
         />
       )}
     </SafeAreaView>
   );
 };
 
-export default Recepies;
+export default Recipies;
 
 const styles = StyleSheet.create({
   container: {
