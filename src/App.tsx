@@ -13,8 +13,12 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Recipies from './modules/Recepies';
 import RecipeDetails from './modules/Recepies/Screens/RecipeDetails';
+export type RootStackParamList = {
+  Recipies: undefined;
+  Details: {visits?: number};
+};
 
-const {Navigator, Screen} = createNativeStackNavigator();
+const {Navigator, Screen} = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
     <NavigationContainer>

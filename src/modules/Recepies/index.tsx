@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -8,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {RootStackParamList} from '../../App';
 import Logo from '../../assets/logo.png';
 import {makeServer} from '../../server';
 import PageHeader from './components/PageHeader';
@@ -32,10 +34,12 @@ type ViewsProps = {
   views: number;
 };
 
+type Props = NativeStackScreenProps<RootStackParamList, 'Recipies'>;
+
 const ERROR_MESSAGE =
   'Sorry, we are having some internal issues. But dont worrie, our team is working to quickly fix it. Try again latter';
 
-const Recipies: React.FC = ({navigation}) => {
+const Recipies: React.FC<Props> = ({navigation}) => {
   const [recipies, setRecipies] = useState<RecipieProps[]>();
   const [recipiesViews, setRecipiesViews] = useState<ViewsProps[]>([]);
   const [serverError, setServerError] = useState<string>();

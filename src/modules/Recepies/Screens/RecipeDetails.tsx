@@ -1,3 +1,4 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {
   Image,
@@ -7,9 +8,12 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {RootStackParamList} from '../../../App';
 import Back from '../../../assets/back.png';
 
-const RecipeDetails: React.FC = ({navigation, route}) => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Details'>;
+
+const RecipeDetails: React.FC<Props> = ({navigation, route}) => {
   const {visits} = route.params;
   return (
     <SafeAreaView>
