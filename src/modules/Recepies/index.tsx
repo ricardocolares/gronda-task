@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Logo from '../../assets/logo.png';
 import {makeServer} from '../../server';
-import MasterClassBanner from './components/MasterClassBanner';
+import PageHeader from './components/PageHeader';
 import RecipeCard from './components/RecepieCard';
 
 if (process.env.NODE_ENV === 'development') {
@@ -53,23 +53,6 @@ const Recipies: React.FC = ({navigation}) => {
 
     fetchUsers();
   }, [recipies]);
-
-  const renderHeader = () => {
-    return (
-      <View>
-        <MasterClassBanner imageUri="https://d3566jsyo19arr.cloudfront.net/banner/marco_mueller_banner.jpg" />
-        <Text style={styles.text}>Creation for you</Text>
-      </View>
-    );
-  };
-
-  const renderFooter = () => {
-    return (
-      <View>
-        <Text style={styles.text}>No more results</Text>
-      </View>
-    );
-  };
 
   const handleVisitsCount = (id: number) => {
     const recipieWithViews = recipiesViews?.find(recipe => recipe.id === id);
@@ -129,8 +112,7 @@ const Recipies: React.FC = ({navigation}) => {
           numColumns={2}
           columnWrapperStyle={{justifyContent: 'space-between'}}
           keyExtractor={item => item.id.toString()}
-          ListHeaderComponent={renderHeader}
-          ListFooterComponent={renderFooter}
+          ListHeaderComponent={<PageHeader />}
           onEndReachedThreshold={0.2}
         />
       )}
