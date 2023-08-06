@@ -54,10 +54,6 @@ const Recipies: React.FC = ({navigation}) => {
     fetchUsers();
   }, [recipies]);
 
-  useEffect(() => {
-    console.log('recipiesViews', recipiesViews);
-  }, [recipiesViews]);
-
   const renderHeader = () => {
     return (
       <View>
@@ -77,11 +73,13 @@ const Recipies: React.FC = ({navigation}) => {
 
   const handleVisitsCount = (id: number) => {
     const recipieWithViews = recipiesViews?.find(recipe => recipe.id === id);
+    let data: ViewsProps[] = [];
     if (!recipieWithViews) {
       setRecipiesViews([...recipiesViews, {id, views: 1}]);
+      data = [...recipiesViews, {id: id, views: 1}];
+      return data;
     }
     if (recipieWithViews) {
-      console.log('recipieWithViews', recipieWithViews);
       const newRecipies = recipiesViews.filter(
         recipe => recipe.id !== recipieWithViews.id,
       );
@@ -89,14 +87,20 @@ const Recipies: React.FC = ({navigation}) => {
         ...newRecipies,
         {id: recipieWithViews.id, views: recipieWithViews.views + 1},
       ]);
+      data = [
+        ...newRecipies,
+        {id: recipieWithViews.id, views: recipieWithViews.views + 1},
+      ];
+      return data;
     }
+    return data;
   };
 
   const handleNavigation = (id: number) => {
-    handleVisitsCount(id);
-    const recipeSelected = recipiesViews.find(recipe => recipe.id === id);
+    const views = handleVisitsCount(id);
+    const result = views.find(obj => obj.id === id);
     return navigation.navigate('Details', {
-      visits: recipeSelected?.views,
+      visits: result?.views,
     });
   };
 
