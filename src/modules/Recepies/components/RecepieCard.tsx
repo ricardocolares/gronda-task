@@ -15,14 +15,11 @@ type CardProps = {
 };
 
 export default function RecepieCard({img_url, title, navigation}: CardProps) {
-  const handleNavigation = () => {
-    navigation();
-  };
   return (
-    <TouchableWithoutFeedback onPress={handleNavigation}>
+    <TouchableWithoutFeedback onPress={navigation}>
       <View style={styles.listContainer}>
         <Image style={styles.imageCard} source={{uri: img_url}} />
-        <Text style={styles.text}>{title}</Text>
+        <Text style={styles.text}>{title ? title : 'Recipe'}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -36,5 +33,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   imageCard: {width: '100%', height: 162, borderRadius: 5},
-  text: {fontWeight: 'bold', color: 'black', marginTop: 12},
+  text: {fontWeight: 'bold', marginTop: 12, color: '#333333', fontSize: 17},
 });

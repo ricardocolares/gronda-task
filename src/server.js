@@ -50,41 +50,6 @@ export function makeServer({environment = 'development'} = {}) {
               img_url:
                 'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
             },
-            {
-              id: 7,
-              category_id: 1,
-              title: 'Panificando',
-              img_url:
-                'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
-            },
-            {
-              id: 8,
-              category_id: 3,
-              title: '',
-              img_url:
-                'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-            },
-            {
-              id: 9,
-              category_id: 1,
-              title: 'Panificando',
-              img_url:
-                'https://d2bn8tb344j6vy.cloudfront.net/W6eu9RP1pc/stories/thumbnail_ik.png',
-            },
-            {
-              id: 10,
-              category_id: 3,
-              title: '',
-              img_url:
-                'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-            },
-            {
-              id: 11,
-              category_id: 3,
-              title: '',
-              img_url:
-                'https://d2bn8tb344j6vy.cloudfront.net/An4jAVSUOQ/stories/qz.JPEG',
-            },
           ],
         };
       });

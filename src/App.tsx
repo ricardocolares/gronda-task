@@ -15,7 +15,6 @@ import Recipies from './modules/Recepies';
 import RecipeDetails from './modules/Recepies/Screens/RecipeDetails';
 
 const {Navigator, Screen} = createNativeStackNavigator();
-
 const App = () => {
   return (
     <NavigationContainer>
@@ -25,7 +24,11 @@ const App = () => {
           component={Recipies}
           options={{headerShown: false}}
         />
-        <Screen name="Details" component={RecipeDetails} />
+        <Screen
+          name="Details"
+          component={RecipeDetails}
+          options={{headerShown: false}}
+        />
       </Navigator>
     </NavigationContainer>
   );

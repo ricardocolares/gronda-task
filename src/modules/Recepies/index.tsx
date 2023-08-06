@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -27,12 +27,17 @@ type RecipieProps = {
   img_url: string;
   views: number;
 };
+type ViewsProps = {
+  id: number;
+  views: number;
+};
 
 const ERROR_MESSAGE =
   'Sorry, we are having some internal issues. But dont worrie, our team is working to quickly fix it. Try again latter';
 
 const Recipies: React.FC = ({navigation}) => {
   const [recipies, setRecipies] = useState<RecipieProps[]>();
+  const [recipiesViews, setRecipiesViews] = useState<ViewsProps[]>([]);
   const [serverError, setServerError] = useState<string>();
 
   useEffect(() => {
@@ -40,11 +45,7 @@ const Recipies: React.FC = ({navigation}) => {
       try {
         const res = await fetch('/api/recipies');
         const data = await res.json();
-        const formatedRecipies = data.recipies.map((recipie: RecipieProps) => ({
-          ...recipie,
-          views: 0,
-        }));
-        data.error ? setServerError(data.error) : setRecipies(formatedRecipies);
+        data.error ? setServerError(data.error) : setRecipies(data.recipies);
       } catch {
         setServerError(ERROR_MESSAGE);
       }
@@ -52,6 +53,10 @@ const Recipies: React.FC = ({navigation}) => {
 
     fetchUsers();
   }, [recipies]);
+
+  useEffect(() => {
+    console.log('recipiesViews', recipiesViews);
+  }, [recipiesViews]);
 
   const renderHeader = () => {
     return (
@@ -70,6 +75,31 @@ const Recipies: React.FC = ({navigation}) => {
     );
   };
 
+  const handleVisitsCount = (id: number) => {
+    const recipieWithViews = recipiesViews?.find(recipe => recipe.id === id);
+    if (!recipieWithViews) {
+      setRecipiesViews([...recipiesViews, {id, views: 1}]);
+    }
+    if (recipieWithViews) {
+      console.log('recipieWithViews', recipieWithViews);
+      const newRecipies = recipiesViews.filter(
+        recipe => recipe.id !== recipieWithViews.id,
+      );
+      setRecipiesViews([
+        ...newRecipies,
+        {id: recipieWithViews.id, views: recipieWithViews.views + 1},
+      ]);
+    }
+  };
+
+  const handleNavigation = (id: number) => {
+    handleVisitsCount(id);
+    const recipeSelected = recipiesViews.find(recipe => recipe.id === id);
+    return navigation.navigate('Details', {
+      visits: recipeSelected?.views,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
@@ -77,7 +107,9 @@ const Recipies: React.FC = ({navigation}) => {
       {serverError ? (
         <Text testID="server-error">{serverError}</Text>
       ) : !recipies ? (
-        <Text>Loading...</Text>
+        <View style={styles.main}>
+          <Text>Loading...</Text>
+        </View>
       ) : recipies.length === 0 ? (
         <Text testID="no-users">No recipies!</Text>
       ) : (
@@ -87,13 +119,7 @@ const Recipies: React.FC = ({navigation}) => {
             <RecipeCard
               img_url={item.img_url}
               title={item.title}
-              navigation={() =>
-                navigation.navigate('Details', {
-                  id: item.id,
-                  count: item.views,
-                  item,
-                })
-              }
+              navigation={() => handleNavigation(item.id)}
             />
           )}
           numColumns={2}
@@ -115,6 +141,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F7F9FD',
   },
+  main: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   logo: {width: '100%', height: 100},
 
   listContainer: {
@@ -130,11 +161,5 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   image: {width: '100%', height: undefined, aspectRatio: 1},
-
-  nameText: {
-    color: 'black',
-    fontWeight: 'bold',
-    marginLeft: 15,
-  },
-  text: {fontWeight: 'bold', color: 'black', marginTop: 12},
+  text: {fontWeight: 'bold', color: '#333333', margin: 12, fontSize: 19},
 });
