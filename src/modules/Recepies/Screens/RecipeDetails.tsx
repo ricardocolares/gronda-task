@@ -27,7 +27,9 @@ const RecipeDetails: React.FC = ({navigation, route}) => {
 
         <View style={styles.visitisArea}>
           <Text style={styles.numberOfVisitsText}>{visits}</Text>
-          <Text style={styles.visitsText}>Visits</Text>
+          <Text style={styles.visitsText}>
+            {visits === 1 ? 'Visit' : 'Visits'}
+          </Text>
         </View>
       </View>
     </SafeAreaView>
