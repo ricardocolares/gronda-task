@@ -114,7 +114,6 @@ const Recipies: React.FC<Props> = ({navigation}) => {
             />
           )}
           numColumns={2}
-          columnWrapperStyle={{justifyContent: 'space-between'}}
           keyExtractor={item => item.id.toString()}
           ListHeaderComponent={<PageHeader />}
           onEndReachedThreshold={0.2}
