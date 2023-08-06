@@ -11,7 +11,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Recipies from './modules/Recepies';
+import RecipiesList from './modules/Recepies/Screens/RecipiesList';
 import RecipeDetails from './modules/Recepies/Screens/RecipeDetails';
 export type RootStackParamList = {
   Recipies: undefined;
@@ -25,7 +25,7 @@ const App = () => {
       <Navigator>
         <Screen
           name="Recipies"
-          component={Recipies}
+          component={RecipiesList}
           options={{headerShown: false}}
         />
         <Screen
