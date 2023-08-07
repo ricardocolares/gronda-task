@@ -101,6 +101,7 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
           data={recipies}
           renderItem={({item}) => (
             <RecipeCard
+              testID="recipe-card"
               img_url={item.img_url}
               title={item.title}
               navigation={() => handleNavigation(item.id)}
