@@ -70,17 +70,23 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
     });
   };
 
-  const {isLoading, error, data} = useQuery('repoData', async () => {
-    try {
-      const res = await fetch('/api/recipies');
-      const recipeList = await res.json();
-      recipeList.error
-        ? setServerError(recipeList.error)
-        : setRecipies(recipeList.recipies);
-    } catch {
-      setServerError(ERROR_MESSAGE);
-    }
-  });
+  const {isLoading, error, data} = useQuery(
+    'repoData',
+    async () => {
+      try {
+        const res = await fetch('/api/recipies');
+        const recipeList = await res.json();
+        recipeList.error
+          ? setServerError(recipeList.error)
+          : setRecipies(recipeList.recipies);
+      } catch {
+        setServerError(ERROR_MESSAGE);
+      }
+    },
+    {
+      cacheTime: 5000,
+    },
+  );
 
   useEffect(() => {
     console.log(data);
