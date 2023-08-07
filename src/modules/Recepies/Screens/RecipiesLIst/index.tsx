@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {useQuery, QueryClient, QueryClientProvider} from 'react-query';
 import {RootStackParamList} from '../../../../App';
 import Logo from '../../../../assets/logo.png';
 import {makeServer} from '../../../../server';
@@ -43,20 +44,6 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
   const [recipiesViews, setRecipiesViews] = useState<ViewsProps[]>([]);
   const [serverError, setServerError] = useState<string>();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch('/api/recipies');
-        const data = await res.json();
-        data.error ? setServerError(data.error) : setRecipies(data.recipies);
-      } catch {
-        setServerError(ERROR_MESSAGE);
-      }
-    };
-
-    fetchUsers();
-  }, [recipies]);
-
   const handleVisitsCount = (id: number): ViewsProps[] => {
     const recipieWithViews = recipiesViews.find(recipe => recipe.id === id);
 
@@ -83,17 +70,36 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
     });
   };
 
+  const {isLoading, error, data} = useQuery('repoData', async () => {
+    try {
+      const res = await fetch('/api/recipies');
+      const recipeList = await res.json();
+      recipeList.error
+        ? setServerError(recipeList.error)
+        : setRecipies(recipeList.recipies);
+    } catch {
+      setServerError(ERROR_MESSAGE);
+    }
+  });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.main}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
       {serverError && <Text testID="server-error">{serverError}</Text>}
-
-      {!recipies ? (
-        <View style={styles.main}>
-          <Text>Loading...</Text>
-        </View>
-      ) : recipies.length === 0 ? (
+      {recipies?.length === 0 ? (
         <Text testID="no-recipies">No recipies!</Text>
       ) : (
         <FlatList

@@ -13,28 +13,32 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RecipiesList from './modules/Recepies/Screens/RecipiesLIst';
 import RecipeDetails from './modules/Recepies/Screens/RecipeDetails';
+import {QueryClient, QueryClientProvider} from 'react-query';
 export type RootStackParamList = {
   Recipies: undefined;
   Details: {visits?: number};
 };
+const queryClient = new QueryClient();
 
 const {Navigator, Screen} = createNativeStackNavigator<RootStackParamList>();
 const App = () => {
   return (
-    <NavigationContainer>
-      <Navigator>
-        <Screen
-          name="Recipies"
-          component={RecipiesList}
-          options={{headerShown: false}}
-        />
-        <Screen
-          name="Details"
-          component={RecipeDetails}
-          options={{headerShown: false}}
-        />
-      </Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Navigator>
+          <Screen
+            name="Recipies"
+            component={RecipiesList}
+            options={{headerShown: false}}
+          />
+          <Screen
+            name="Details"
+            component={RecipeDetails}
+            options={{headerShown: false}}
+          />
+        </Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 };
 
