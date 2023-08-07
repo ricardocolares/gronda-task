@@ -1,5 +1,6 @@
 import React from 'react';
-import {Dimensions, ImageBackground, StyleSheet, Text} from 'react-native';
+import {Dimensions, ImageBackground, StyleSheet} from 'react-native';
+import CustomText from '../../../components/CustomText';
 
 type BannerProps = {
   imageUri: string;
@@ -13,11 +14,22 @@ export default function MasterClassBanner({imageUri}: BannerProps) {
       }}
       style={styles.masterClassImage}
       imageStyle={{borderRadius: 6}}>
-      <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 12}}>NEW</Text>
-      <Text style={{color: '#fff', fontSize: 24}}>
-        Fish preparation like {'\n'}a star chef
-      </Text>
-      <Text style={{color: '#fff', fontSize: 12}}>With Rolf Fliegauf</Text>
+      <CustomText
+        children="NEW"
+        textColor="#ffffff"
+        textSize={12}
+        fontWeight="bold"
+      />
+      <CustomText
+        children="Fish preparation like a star chef"
+        textSize={24}
+        textColor="#FFFFFF"
+      />
+      <CustomText
+        children="With Rolf Fliegauf"
+        textColor="#ffffff"
+        textSize={12}
+      />
     </ImageBackground>
   );
 }
