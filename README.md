@@ -21,3 +21,4 @@ Some of the technologies I used to develop this challenge are:
 
 1.  Move state logic to a custom hook using useReducer to make the app features more scalable
 2.  Create more tests use cases
+3.  Create/use more custom components
