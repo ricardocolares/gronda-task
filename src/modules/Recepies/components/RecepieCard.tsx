@@ -16,7 +16,7 @@ type CardProps = {
 
 export default function RecepieCard({img_url, title, navigation}: CardProps) {
   return (
-    <TouchableWithoutFeedback onPress={navigation}>
+    <TouchableWithoutFeedback onPress={navigation} testID="recipe-card">
       <View style={styles.listContainer}>
         <Image style={styles.imageCard} source={{uri: img_url}} />
         <Text style={styles.text}>{title ? title : 'Recipe'}</Text>

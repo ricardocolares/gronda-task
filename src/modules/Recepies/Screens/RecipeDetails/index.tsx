@@ -8,8 +8,8 @@ import {
   View,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {RootStackParamList} from '../../../App';
-import Back from '../../../assets/back.png';
+import {RootStackParamList} from '../../../../App';
+import Back from '../../../../assets/back.png';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Details'>;
 
@@ -20,7 +20,8 @@ const RecipeDetails: React.FC<Props> = ({navigation, route}) => {
       <View style={styles.container}>
         <View style={styles.backButtonArea}>
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Recipies')}>
+            onPress={() => navigation.navigate('Recipies')}
+            testID="back-button">
             <Image
               style={styles.backButton}
               resizeMode={'center'}
@@ -30,7 +31,11 @@ const RecipeDetails: React.FC<Props> = ({navigation, route}) => {
         </View>
 
         <View style={styles.visitisArea}>
-          <Text style={styles.numberOfVisitsText}>{visits}</Text>
+          <Text
+            style={styles.numberOfVisitsText}
+            testID="number-of-visits-text">
+            {visits}
+          </Text>
           <Text style={styles.visitsText}>
             {visits === 1 ? 'Visit' : 'Visits'}
           </Text>

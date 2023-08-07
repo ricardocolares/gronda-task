@@ -11,7 +11,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import RecipiesList from './modules/Recepies/Screens/RecipiesList';
+import RecipiesList from './modules/Recepies/Screens/RecipiesLIst';
 import RecipeDetails from './modules/Recepies/Screens/RecipeDetails';
 export type RootStackParamList = {
   Recipies: undefined;

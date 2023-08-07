@@ -7,6 +7,6 @@
     /* Completeness */
     "lib": ["es5", "es6", "dom"],
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "jest"]
   }
 }

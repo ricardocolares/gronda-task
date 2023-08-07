@@ -9,11 +9,11 @@ import {
   Text,
   View,
 } from 'react-native';
-import {RootStackParamList} from '../../../App';
-import Logo from '../../../assets/logo.png';
-import {makeServer} from '../../../server';
-import PageHeader from '../components/PageHeader';
-import RecipeCard from '../components/RecepieCard';
+import {RootStackParamList} from '../../../../App';
+import Logo from '../../../../assets/logo.png';
+import {makeServer} from '../../../../server';
+import PageHeader from '../../components/PageHeader';
+import RecipeCard from '../../components/RecepieCard';
 
 if (process.env.NODE_ENV === 'development') {
   if ((window as any).server) {
@@ -27,8 +27,8 @@ type RecipieProps = {
   category_id?: number;
   title: string;
   img_url: string;
-  views: number;
 };
+
 type ViewsProps = {
   id: number;
   views: number;
@@ -36,8 +36,7 @@ type ViewsProps = {
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Recipies'>;
 
-const ERROR_MESSAGE =
-  'Sorry, we are having some internal issues. But dont worrie, our team is working to quickly fix it. Try again latter';
+const ERROR_MESSAGE = 'Sorry, try again latter';
 
 const RecipiesList: React.FC<Props> = ({navigation}) => {
   const [recipies, setRecipies] = useState<RecipieProps[]>();
@@ -58,29 +57,22 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
     fetchUsers();
   }, [recipies]);
 
-  const handleVisitsCount = (id: number) => {
-    const recipieWithViews = recipiesViews?.find(recipe => recipe.id === id);
-    let data: ViewsProps[] = [];
+  const handleVisitsCount = (id: number): ViewsProps[] => {
+    const recipieWithViews = recipiesViews.find(recipe => recipe.id === id);
+
     if (!recipieWithViews) {
-      setRecipiesViews([...recipiesViews, {id, views: 1}]);
-      data = [...recipiesViews, {id: id, views: 1}];
-      return data;
+      const newRecipeView = {id, views: 1};
+      setRecipiesViews([...recipiesViews, newRecipeView]);
+      return [newRecipeView];
     }
-    if (recipieWithViews) {
-      const newRecipies = recipiesViews.filter(
-        recipe => recipe.id !== recipieWithViews.id,
-      );
-      setRecipiesViews([
-        ...newRecipies,
-        {id: recipieWithViews.id, views: recipieWithViews.views + 1},
-      ]);
-      data = [
-        ...newRecipies,
-        {id: recipieWithViews.id, views: recipieWithViews.views + 1},
-      ];
-      return data;
-    }
-    return data;
+
+    const updatedViews = recipieWithViews.views + 1;
+    const updatedRecipeViews = recipiesViews.map(recipe =>
+      recipe.id === id ? {...recipe, views: updatedViews} : recipe,
+    );
+
+    setRecipiesViews(updatedRecipeViews);
+    return updatedRecipeViews;
   };
 
   const handleNavigation = (id: number) => {
@@ -98,13 +90,14 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
       {serverError ? (
         <Text testID="server-error">{serverError}</Text>
       ) : !recipies ? (
-        <View style={styles.main}>
+        <View testID="no-recipies" style={styles.main}>
           <Text>Loading...</Text>
         </View>
       ) : recipies.length === 0 ? (
-        <Text testID="no-users">No recipies!</Text>
+        <Text testID="no-recipies">No recipies!</Text>
       ) : (
         <FlatList
+          testID="recipies-list"
           data={recipies}
           renderItem={({item}) => (
             <RecipeCard

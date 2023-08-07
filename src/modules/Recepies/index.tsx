@@ -1,1 +1,1 @@
-export {default as RecipiesList} from './Screens/RecipiesList';
+export {default as RecipiesList} from './Screens/RecipiesLIst';
