@@ -12,13 +12,12 @@ type CardProps = {
   title: string;
   img_url: string;
   navigation: () => void;
-  testID: string;
 };
 
 export default function RecepieCard({img_url, title, navigation}: CardProps) {
   return (
-    <TouchableWithoutFeedback onPress={navigation}>
-      <View style={styles.listContainer}>
+    <TouchableWithoutFeedback onPress={navigation} testID="recipe-card">
+      <View style={styles.listContainer} testID="recipe-card">
         <Image style={styles.imageCard} source={{uri: img_url}} />
         <Text style={styles.text}>{title ? title : 'Recipe'}</Text>
       </View>

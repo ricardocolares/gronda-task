@@ -87,10 +87,10 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <Image style={styles.logo} resizeMode={'center'} source={Logo} />
 
-      {serverError ? (
-        <Text testID="server-error">{serverError}</Text>
-      ) : !recipies ? (
-        <View testID="no-recipies" style={styles.main}>
+      {serverError && <Text testID="server-error">{serverError}</Text>}
+
+      {!recipies ? (
+        <View style={styles.main}>
           <Text>Loading...</Text>
         </View>
       ) : recipies.length === 0 ? (
@@ -101,7 +101,6 @@ const RecipiesList: React.FC<Props> = ({navigation}) => {
           data={recipies}
           renderItem={({item}) => (
             <RecipeCard
-              testID="recipe-card"
               img_url={item.img_url}
               title={item.title}
               navigation={() => handleNavigation(item.id)}
